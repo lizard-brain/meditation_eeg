@@ -33,16 +33,24 @@ for metric in metric_columns:
     except KeyError as e:
         print(f"Error: {e} not found in the data.")
 
-# Create a bar chart for AUC results
-plt.figure(figsize=(10, 6))
-plt.barh(list(results.keys()), list(results.values()), color='skyblue')
-plt.xlabel('Area Under the Curve (AUC)')
-plt.ylabel('Metrics')
-plt.title('AUC for EEG Metrics')
+# Create separate subplots for each sensor's metrics
+num_sensors = 4
+fig, axs = plt.subplots(num_sensors, 1, figsize=(10, 6 * num_sensors))
+
+sensors = ['TP9', 'AF7', 'AF8', 'TP10']
+for i, sensor in enumerate(sensors):
+    sensor_metrics = [metric for metric in metric_columns if sensor in metric]
+    sensor_results = {metric: results[metric] for metric in sensor_metrics}
+
+    axs[i].barh(list(sensor_results.keys()), list(sensor_results.values()), color='skyblue')
+    axs[i].set_xlabel('Area Under the Curve (AUC)')
+    axs[i].set_ylabel('Metrics')
+    axs[i].set_title(f'AUC for {sensor} Metrics')
+
 plt.tight_layout()
 
-# Save the bar chart as an image
-plt.savefig('auc_bar_chart.png')
+# Save the subplots as an image
+plt.savefig('auc_subplots.png')
 
-# Display the bar chart
+# Display the subplots
 plt.show()
