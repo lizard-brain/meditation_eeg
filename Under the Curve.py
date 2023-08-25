@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 from scipy import integrate
 from datetime import datetime
 import matplotlib.pyplot as plt
@@ -33,7 +32,11 @@ for metric in metric_columns:
     except KeyError as e:
         print(f"Error: {e} not found in the data.")
 
-# Create separate subplots for each sensor's metrics
+# Calculate the minimum and maximum AUC values
+min_auc = min(results.values())
+max_auc = max(results.values())
+
+# Create subplots with consistent y-axis scales
 num_sensors = 4
 fig, axs = plt.subplots(num_sensors, 1, figsize=(10, 6 * num_sensors))
 
@@ -43,6 +46,7 @@ for i, sensor in enumerate(sensors):
     sensor_results = {metric: results[metric] for metric in sensor_metrics}
 
     axs[i].barh(list(sensor_results.keys()), list(sensor_results.values()), color='skyblue')
+    axs[i].set_xlim(min_auc, max_auc)  # Set y-axis limits
     axs[i].set_xlabel('Area Under the Curve (AUC)')
     axs[i].set_ylabel('Metrics')
     axs[i].set_title(f'AUC for {sensor} Metrics')
@@ -50,7 +54,7 @@ for i, sensor in enumerate(sensors):
 plt.tight_layout()
 
 # Save the subplots as an image
-plt.savefig('auc_subplots.png')
+plt.savefig('auc_subplots_same_scale.png')
 
 # Display the subplots
 plt.show()
