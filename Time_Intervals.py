@@ -1,19 +1,29 @@
 import pandas as pd
 from scipy import integrate
 import os
+import zipfile
 import matplotlib.pyplot as plt
 
-def generate_auc_graph(data_path, interval=60):
+
+def generate_auc_graph_from_zip(zip_path, interval=60):
     """
-    Generate a graph showing the total area under the curve (AUC) for EEG metrics grouped by type.
+    Generate a graph showing the total area under the curve (AUC) for EEG metrics grouped by type
+    from a CSV file within a zip archive with the same name.
 
     Parameters:
-    - data_path (str): Path to the CSV file containing the EEG data.
+    - zip_path (str): Path to the zip archive containing the CSV file.
     - interval (int): Interval in seconds for calculating AUC within.
 
     Returns:
     None
     """
+    base_csv_filename = os.path.splitext(os.path.basename(zip_path))[0] + '.csv'
+
+    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        zip_ref.extract(base_csv_filename)
+
+    data_path = base_csv_filename  # Path to the extracted CSV file
+
     # Read the data
     data = pd.read_csv(data_path, delimiter=',')
 
@@ -98,4 +108,4 @@ def generate_auc_graph(data_path, interval=60):
     plt.show()
 
 # Call the function with the data path and desired interval
-generate_auc_graph('data.csv', interval=60)
+generate_auc_graph_from_zip('museMonitor_2023-07-21--09-33-22_1659777750991443966.zip', interval=60)
