@@ -1,5 +1,6 @@
 import pandas as pd
 from scipy import integrate
+import os
 import matplotlib.pyplot as plt
 
 def generate_auc_graph(data_path, interval=60):
@@ -90,7 +91,8 @@ def generate_auc_graph(data_path, interval=60):
     plt.tick_params(axis='y', colors='white')
 
     # Save the line chart as an image
-    plt.savefig('grouped_auc_line_chart_colored_black_background.png', facecolor='black')
+    output_filename = os.path.splitext(os.path.basename(data_path))[0] + '_grouped_auc_line_chart.png'
+    plt.savefig(output_filename, facecolor='black')
 
     # Display the line chart
     plt.show()
