@@ -9,3 +9,5 @@ cleaned_data.csv
 auc_results.csv
 auc_bar_chart.png
 auc_subplots.png
+grouped_auc_bar_chart.png
+grouped_auc_line_chart.png
